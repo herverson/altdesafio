@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600px" height="900px" viewBox="0 0 1600 900" version="1.1">
+<title>Diagrama de Classes - Sistema AltForce (Arquitetura Original)</title>
+<defs>
+  <style type="text/css">
+    .class-box { fill: #ffffff; stroke: #000000; stroke-width: 1; }
+    .abstract-class { fill: #f0f8ff; stroke: #000000; stroke-width: 1; }
+    .interface-box { fill: #e6f3ff; stroke: #0066cc; stroke-width: 1; }
+    .class-title { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; }
+    .abstract-title { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; font-style: italic; text-anchor: middle; }
+    .interface-title { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; color: #0066cc; }
+    .class-content { font-family: Arial, sans-serif; font-size: 10px; text-anchor: start; }
+    .inheritance-line { stroke: #000000; stroke-width: 1.5; fill: none; marker-end: url(#inheritanceArrow); }
+    .composition-line { stroke: #000000; stroke-width: 1.5; fill: none; marker-end: url(#compositionArrow); }
+    .separator { stroke: #000000; stroke-width: 1; }
+  </style>
+  
+  <!-- Markers for arrows -->
+  <marker id="inheritanceArrow" markerWidth="15" markerHeight="15" refX="12" refY="6" orient="auto">
+    <polygon points="0,0 0,12 12,6" fill="white" stroke="black" stroke-width="1"/>
+  </marker>
+  <marker id="compositionArrow" markerWidth="15" markerHeight="15" refX="12" refY="6" orient="auto">
+    <polygon points="0,6 6,0 12,6 6,12" fill="black"/>
+  </marker>
+</defs>
+
+<!-- Background -->
+<rect width="1600" height="900" fill="#fafafa"/>
+
+<!-- Title -->
+<text x="800" y="25" class="class-title" font-size="16" font-weight="bold">Diagrama de Classes - Sistema de Orçamentos Dinâmicos AltForce</text>
+
+<!-- Row 1: BaseModel and BusinessRule -->
+<!-- BaseModel -->
+<g id="basemodel">
+  <rect x="50" y="60" width="200" height="120" class="abstract-class"/>
+  <text x="150" y="78" class="abstract-title">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="150" y="95" class="abstract-title">BaseModel</text>
+  <line x1="50" y1="105" x2="250" y2="105" class="separator"/>
+  <text x="55" y="120" class="class-content">+ String id</text>
+  <text x="55" y="135" class="class-content">+ String name</text>
+  <line x1="50" y1="145" x2="250" y2="145" class="separator"/>
+  <text x="55" y="160" class="class-content">+ toJson(): Map&lt;String, dynamic&gt;</text>
+  <text x="55" y="175" class="class-content">+ equals(Object): bool</text>
+</g>
+
+<!-- BusinessRule -->
+<g id="businessrule">
+  <rect x="350" y="60" width="220" height="140" class="abstract-class"/>
+  <text x="460" y="78" class="abstract-title">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="460" y="95" class="abstract-title">BusinessRule</text>
+  <line x1="350" y1="105" x2="570" y2="105" class="separator"/>
+  <text x="355" y="120" class="class-content">+ String id</text>
+  <text x="355" y="135" class="class-content">+ String name</text>
+  <text x="355" y="150" class="class-content">+ int priority</text>
+  <text x="355" y="165" class="class-content">+ bool isEnabled</text>
+  <line x1="350" y1="175" x2="570" y2="175" class="separator"/>
+  <text x="355" y="190" class="class-content">+ isApplicable(RuleContext): bool</text>
+</g>
+
+<!-- Row 2: Product and Rule Types -->
+<!-- Product -->
+<g id="product">
+  <rect x="50" y="230" width="200" height="160" class="abstract-class"/>
+  <text x="150" y="248" class="abstract-title">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="150" y="265" class="abstract-title">Product</text>
+  <line x1="50" y1="275" x2="250" y2="275" class="separator"/>
+  <text x="55" y="290" class="class-content">+ String description</text>
+  <text x="55" y="305" class="class-content">+ double basePrice</text>
+  <text x="55" y="320" class="class-content">+ Map&lt;String, dynamic&gt; attributes</text>
+  <line x1="50" y1="330" x2="250" y2="330" class="separator"/>
+  <text x="55" y="345" class="class-content">+ getFormFields(): List&lt;FormFieldConfig&gt;</text>
+  <text x="55" y="360" class="class-content">+ validate(Map): List&lt;String&gt;</text>
+  <text x="55" y="375" class="class-content">+ calculateBasePrice(Map): double</text>
+</g>
+
+<!-- PricingRule -->
+<g id="pricingrule">
+  <rect x="300" y="230" width="200" height="100" class="abstract-class"/>
+  <text x="400" y="248" class="abstract-title">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="400" y="265" class="abstract-title">PricingRule</text>
+  <line x1="300" y1="275" x2="500" y2="275" class="separator"/>
+  <text x="305" y="290" class="class-content">+ ruleType: "pricing"</text>
+  <line x1="300" y1="300" x2="500" y2="300" class="separator"/>
+  <text x="305" y="315" class="class-content">+ calculatePriceAdjustment(): double</text>
+</g>
+
+<!-- ValidationRule -->
+<g id="validationrule">
+  <rect x="520" y="230" width="200" height="100" class="abstract-class"/>
+  <text x="620" y="248" class="abstract-title">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="620" y="265" class="abstract-title">ValidationRule</text>
+  <line x1="520" y1="275" x2="720" y2="275" class="separator"/>
+  <text x="525" y="290" class="class-content">+ ruleType: "validation"</text>
+  <line x1="520" y1="300" x2="720" y2="300" class="separator"/>
+  <text x="525" y="315" class="class-content">+ validateFields(): List&lt;String&gt;</text>
+</g>
+
+<!-- VisibilityRule -->
+<g id="visibilityrule">
+  <rect x="740" y="230" width="200" height="100" class="abstract-class"/>
+  <text x="840" y="248" class="abstract-title">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="840" y="265" class="abstract-title">VisibilityRule</text>
+  <line x1="740" y1="275" x2="940" y2="275" class="separator"/>
+  <text x="745" y="290" class="class-content">+ ruleType: "visibility"</text>
+  <line x1="740" y1="300" x2="940" y2="300" class="separator"/>
+  <text x="745" y="315" class="class-content">+ applyVisibilityChanges(): Map</text>
+</g>
+
+<!-- Row 3: Product Implementations -->
+<!-- IndustrialProduct -->
+<g id="industrial">
+  <rect x="50" y="430" width="180" height="80" class="class-box"/>
+  <text x="140" y="450" class="class-title">IndustrialProduct</text>
+  <line x1="50" y1="460" x2="230" y2="460" class="separator"/>
+  <text x="55" y="475" class="class-content">+ productType: "industrial"</text>
+  <text x="55" y="490" class="class-content">+ getFormFields()</text>
+  <text x="55" y="505" class="class-content">+ validate()</text>
+</g>
+
+<!-- ResidentialProduct -->
+<g id="residential">
+  <rect x="250" y="430" width="180" height="80" class="class-box"/>
+  <text x="340" y="450" class="class-title">ResidentialProduct</text>
+  <line x1="250" y1="460" x2="430" y2="460" class="separator"/>
+  <text x="255" y="475" class="class-content">+ productType: "residential"</text>
+  <text x="255" y="490" class="class-content">+ getFormFields()</text>
+  <text x="255" y="505" class="class-content">+ validate()</text>
+</g>
+
+<!-- CorporateProduct -->
+<g id="corporate">
+  <rect x="450" y="430" width="180" height="80" class="class-box"/>
+  <text x="540" y="450" class="class-title">CorporateProduct</text>
+  <line x1="450" y1="460" x2="630" y2="460" class="separator"/>
+  <text x="455" y="475" class="class-content">+ productType: "corporate"</text>
+  <text x="455" y="490" class="class-content">+ getFormFields()</text>
+  <text x="455" y="505" class="class-content">+ validate()</text>
+</g>
+
+<!-- Row 4: Repository and Engines -->
+<!-- IRepository -->
+<g id="irepository">
+  <rect x="50" y="550" width="200" height="100" class="interface-box"/>
+  <text x="150" y="568" class="interface-title">&lt;&lt;interface&gt;&gt;</text>
+  <text x="150" y="585" class="interface-title">IRepository&lt;T&gt;</text>
+  <line x1="50" y1="595" x2="250" y2="595" class="separator"/>
+  <text x="55" y="610" class="class-content">+ findAll(): Future&lt;List&lt;T&gt;&gt;</text>
+  <text x="55" y="625" class="class-content">+ findById(String): Future&lt;T?&gt;</text>
+  <text x="55" y="640" class="class-content">+ save(T): Future&lt;T&gt;</text>
+</g>
+
+<!-- MemoryRepository -->
+<g id="memoryrepo">
+  <rect x="280" y="550" width="200" height="100" class="class-box"/>
+  <text x="380" y="568" class="class-title">MemoryRepository&lt;T&gt;</text>
+  <line x1="280" y1="578" x2="480" y2="578" class="separator"/>
+  <text x="285" y="593" class="class-content">- Map&lt;String, T&gt; _storage</text>
+  <line x1="280" y1="603" x2="480" y2="603" class="separator"/>
+  <text x="285" y="618" class="class-content">+ findAll()</text>
+  <text x="285" y="633" class="class-content">+ save(T)</text>
+  <text x="285" y="648" class="class-content">+ delete(T)</text>
+</g>
+
+<!-- ProductRepository -->
+<g id="productrepo">
+  <rect x="510" y="550" width="200" height="100" class="class-box"/>
+  <text x="610" y="568" class="class-title">ProductRepository</text>
+  <line x1="510" y1="578" x2="710" y2="578" class="separator"/>
+  <text x="515" y="593" class="class-content">extends MemoryRepository&lt;Product&gt;</text>
+  <line x1="510" y1="603" x2="710" y2="603" class="separator"/>
+  <text x="515" y="618" class="class-content">+ findByType(String)</text>
+  <text x="515" y="633" class="class-content">+ findByPriceRange()</text>
+  <text x="515" y="648" class="class-content">- _initializeData()</text>
+</g>
+
+<!-- Row 5: Controllers and Engines -->
+<!-- RulesEngine -->
+<g id="rulesengine">
+  <rect x="1000" y="60" width="200" height="120" class="class-box"/>
+  <text x="1100" y="78" class="class-title">RulesEngine&lt;T&gt;</text>
+  <line x1="1000" y1="88" x2="1200" y2="88" class="separator"/>
+  <text x="1005" y="103" class="class-content">- List&lt;T&gt; _rules</text>
+  <line x1="1000" y1="113" x2="1200" y2="113" class="separator"/>
+  <text x="1005" y="128" class="class-content">+ addRule(T): void</text>
+  <text x="1005" y="143" class="class-content">+ removeRule(String): bool</text>
+  <text x="1005" y="158" class="class-content">+ execute(RuleContext): Result</text>
+  <text x="1005" y="173" class="class-content">+ getRulesByType(String)</text>
+</g>
+
+<!-- PricingEngine -->
+<g id="pricingengine">
+  <rect x="1000" y="200" width="180" height="80" class="class-box"/>
+  <text x="1090" y="220" class="class-title">PricingEngine</text>
+  <line x1="1000" y1="230" x2="1180" y2="230" class="separator"/>
+  <text x="1005" y="245" class="class-content">extends RulesEngine&lt;PricingRule&gt;</text>
+  <line x1="1000" y1="255" x2="1180" y2="255" class="separator"/>
+  <text x="1005" y="270" class="class-content">+ calculateFinalPrice()</text>
+</g>
+
+<!-- ValidationEngine -->
+<g id="validationengine">
+  <rect x="1200" y="200" width="180" height="80" class="class-box"/>
+  <text x="1290" y="220" class="class-title">ValidationEngine</text>
+  <line x1="1200" y1="230" x2="1380" y2="230" class="separator"/>
+  <text x="1205" y="245" class="class-content">extends RulesEngine&lt;ValidationRule&gt;</text>
+  <line x1="1200" y1="255" x2="1380" y2="255" class="separator"/>
+  <text x="1205" y="270" class="class-content">+ validateAll()</text>
+</g>
+
+<!-- VisibilityEngine -->
+<g id="visibilityengine">
+  <rect x="1000" y="300" width="180" height="80" class="class-box"/>
+  <text x="1090" y="320" class="class-title">VisibilityEngine</text>
+  <line x1="1000" y1="330" x2="1180" y2="330" class="separator"/>
+  <text x="1005" y="345" class="class-content">extends RulesEngine&lt;VisibilityRule&gt;</text>
+  <line x1="1000" y1="355" x2="1180" y2="355" class="separator"/>
+  <text x="1005" y="370" class="class-content">+ applyVisibilityRules()</text>
+</g>
+
+<!-- FormController -->
+<g id="formcontroller">
+  <rect x="1000" y="430" width="200" height="140" class="class-box"/>
+  <text x="1100" y="448" class="class-title">FormController&lt;T&gt;</text>
+  <line x1="1000" y1="458" x2="1200" y2="458" class="separator"/>
+  <text x="1005" y="473" class="class-content">- T? _selectedProduct</text>
+  <text x="1005" y="488" class="class-content">- Map&lt;String, dynamic&gt; _formData</text>
+  <text x="1005" y="503" class="class-content">- List&lt;FormFieldConfig&gt; _fields</text>
+  <line x1="1000" y1="513" x2="1200" y2="513" class="separator"/>
+  <text x="1005" y="528" class="class-content">+ selectProduct(T): void</text>
+  <text x="1005" y="543" class="class-content">+ updateField(String, dynamic)</text>
+  <text x="1005" y="558" class="class-content">+ calculatePrice(): PricingResult</text>
+</g>
+
+<!-- BudgetController -->
+<g id="budgetcontroller">
+  <rect x="1250" y="430" width="200" height="140" class="class-box"/>
+  <text x="1350" y="448" class="class-title">BudgetController</text>
+  <line x1="1250" y1="458" x2="1450" y2="458" class="separator"/>
+  <text x="1255" y="473" class="class-content">- FormController? _formController</text>
+  <text x="1255" y="488" class="class-content">- List&lt;Product&gt; _availableProducts</text>
+  <text x="1255" y="503" class="class-content">- PricingResult? _currentPricing</text>
+  <line x1="1250" y1="513" x2="1450" y2="513" class="separator"/>
+  <text x="1255" y="528" class="class-content">+ selectProduct(Product)</text>
+  <text x="1255" y="543" class="class-content">+ submitBudget(): Future&lt;bool&gt;</text>
+  <text x="1255" y="558" class="class-content">+ getBudgetSummary()</text>
+</g>
+
+<!-- Inheritance Lines -->
+<!-- Product extends BaseModel -->
+<path d="M 150 230 L 150 180" class="inheritance-line"/>
+
+<!-- BusinessRule extends BaseModel -->
+<path d="M 350 120 L 250 120" class="inheritance-line"/>
+
+<!-- Rules extend BusinessRule -->
+<path d="M 400 230 L 400 200 L 460 200" class="inheritance-line"/>
+<path d="M 620 230 L 620 200 L 460 200" class="inheritance-line"/>
+<path d="M 840 230 L 840 200 L 460 200" class="inheritance-line"/>
+
+<!-- Products extend Product -->
+<path d="M 140 430 L 140 390" class="inheritance-line"/>
+<path d="M 340 430 L 340 400 L 150 400 L 150 390" class="inheritance-line"/>
+<path d="M 540 430 L 540 400 L 150 400" class="inheritance-line"/>
+
+<!-- Repository implementations -->
+<path d="M 280 600 L 250 600" stroke="#0066cc" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#inheritanceArrow)"/>
+<path d="M 510 600 L 480 600" class="inheritance-line"/>
+
+<!-- Engine inheritance -->
+<path d="M 1090 300 L 1090 280" class="inheritance-line"/>
+<path d="M 1090 200 L 1090 180" class="inheritance-line"/>
+<path d="M 1290 200 L 1290 180 L 1100 180" class="inheritance-line"/>
+
+<!-- Composition Lines -->
+<!-- BudgetController uses FormController -->
+<path d="M 1250 500 L 1200 500" class="composition-line"/>
+
+<!-- FormController uses Engines -->
+<path d="M 1000 470 L 980 470 L 980 240 L 1000 240" class="composition-line"/>
+<path d="M 1000 490 L 960 490 L 960 240 L 1200 240" class="composition-line"/>
+<path d="M 1000 510 L 940 510 L 940 340 L 1000 340" class="composition-line"/>
+
+<!-- BudgetController uses ProductRepository -->
+<path d="M 1250 460 L 800 460 L 800 580 L 710 580" class="composition-line"/>
+
+<!-- Engines use Rules -->
+<path d="M 1000 240 L 500 240 L 500 280" class="composition-line"/>
+<path d="M 1200 240 L 720 240 L 720 280" class="composition-line"/>
+<path d="M 1000 340 L 940 340 L 940 280" class="composition-line"/>
+
+<!-- Legend -->
+<g id="legend">
+  <rect x="50" y="700" width="400" height="150" fill="#f8cecc" stroke="#b85450" stroke-width="1" rx="5"/>
+  <text x="60" y="720" class="class-title" text-anchor="start" font-size="14">LEGENDA:</text>
+  
+  <!-- Inheritance arrow example -->
+  <path d="M 60 740 L 140 740" class="inheritance-line"/>
+  <text x="150" y="745" class="class-content">Herança (extends)</text>
+  
+  <!-- Composition arrow example -->
+  <path d="M 60 760 L 140 760" class="composition-line"/>
+  <text x="150" y="765" class="class-content">Composição (uses/has)</text>
+  
+  <!-- Interface implementation -->
+  <path d="M 60 780 L 140 780" stroke="#0066cc" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#inheritanceArrow)"/>
+  <text x="150" y="785" class="class-content">Implementa Interface</text>
+  
+  <!-- Colors -->
+  <rect x="60" y="800" width="15" height="15" class="class-box"/>
+  <text x="85" y="810" class="class-content">Classe Concreta</text>
+  
+  <rect x="200" y="800" width="15" height="15" class="abstract-class"/>
+  <text x="225" y="810" class="class-content">Classe Abstrata</text>
+  
+  <rect x="60" y="820" width="15" height="15" class="interface-box"/>
+  <text x="85" y="830" class="class-content">Interface</text>
+  
+  <text x="200" y="830" class="class-content">Genéricos: &lt;T&gt;, &lt;T extends BaseModel&gt;</text>
+</g>
+
+<!-- Patterns Box -->
+<g id="patterns">
+  <rect x="500" y="700" width="350" height="150" fill="#e6ffe6" stroke="#00cc00" stroke-width="1" rx="5"/>
+  <text x="510" y="720" class="class-title" text-anchor="start" font-size="14">PADRÕES DE DESIGN IMPLEMENTADOS:</text>
+  
+  <text x="510" y="740" class="class-content">✓ Strategy Pattern: BusinessRule → {PricingRule, ValidationRule, VisibilityRule}</text>
+  <text x="510" y="755" class="class-content">✓ Repository Pattern: IRepository&lt;T&gt; → MemoryRepository&lt;T&gt; → ProductRepository</text>
+  <text x="510" y="770" class="class-content">✓ Template Method: Product, BusinessRule (algoritmos reutilizáveis)</text>
+  <text x="510" y="785" class="class-content">✓ Factory Pattern: DynamicFormFieldFactory (widgets dinâmicos)</text>
+  <text x="510" y="800" class="class-content">✓ Observer Pattern: Controllers reativos com ChangeNotifier</text>
+  <text x="510" y="815" class="class-content">✓ Composition over Inheritance: RulesEngine composta</text>
+  <text x="510" y="830" class="class-content">✓ Genéricos Type-Safe: &lt;T extends BaseModel&gt;, &lt;T extends Product&gt;</text>
+  <text x="510" y="845" class="class-content">✓ DRY Principles: Zero duplicação de lógica</text>
+</g>
+
+<!-- Architecture Info -->
+<g id="architecture">
+  <rect x="900" y="700" width="300" height="150" fill="#fff2e6" stroke="#ff9900" stroke-width="1" rx="5"/>
+  <text x="910" y="720" class="class-title" text-anchor="start" font-size="14">ARQUITETURA IMPLEMENTADA:</text>
+  
+  <text x="910" y="740" class="class-content">📁 models/products/ → Product + especializações</text>
+  <text x="910" y="755" class="class-content">📁 models/rules/ → BusinessRule + tipos</text>
+  <text x="910" y="770" class="class-content">📁 repositories/ → IRepository&lt;T&gt; + implementações</text>
+  <text x="910" y="785" class="class-content">📁 services/ → RulesEngine&lt;T&gt; + especializações</text>
+  <text x="910" y="800" class="class-content">📁 controllers/ → Controllers coordenados</text>
+  <text x="910" y="815" class="class-content">📁 widgets/ → Factory pattern + widgets dinâmicos</text>
+  <text x="910" y="830" class="class-content">🎯 Estados Interdependentes Reativos</text>
+  <text x="910" y="845" class="class-content">⚡ Engine de Regras Configuráveis</text>
+</g>
+
+</svg>
