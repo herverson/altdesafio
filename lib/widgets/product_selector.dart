@@ -82,21 +82,53 @@ class _ProductSelectorState extends State<ProductSelector> {
   Widget _buildTypeChip(String label, String? type) {
     final isSelected = _selectedType == type;
 
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (selected) {
-        setState(() {
-          _selectedType = selected ? type : null;
-        });
-      },
-      backgroundColor: Colors.white.withOpacity(0.2),
-      selectedColor: Colors.white,
-      labelStyle: TextStyle(
-        color: isSelected ? Colors.blue.shade700 : Colors.white,
-        fontWeight: FontWeight.w500,
+    return Container(
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.white : Colors.white.withOpacity(0.25),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white,
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      checkmarkColor: Colors.blue.shade700,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              _selectedType = isSelected ? null : type;
+            });
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? Colors.blue.shade700 : Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                shadows: isSelected
+                    ? null
+                    : [
+                        const Shadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black54,
+                        ),
+                      ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -129,18 +161,19 @@ class _ProductSelectorState extends State<ProductSelector> {
     }
 
     return SizedBox(
-      height: 120,
+      height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];
           final isSelected = widget.selectedProduct?.id == product.id;
 
           return Container(
-            width: 280,
+            width: 200,
             margin: EdgeInsets.only(
-              right: index < products.length - 1 ? 12 : 0,
+              right: index < products.length - 1 ? 8 : 0,
             ),
             child: _buildProductCard(product, isSelected),
           );
@@ -157,83 +190,50 @@ class _ProductSelectorState extends State<ProductSelector> {
         borderRadius: BorderRadius.circular(12),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.white.withOpacity(0.1),
+            color: isSelected ? Colors.white : Colors.white.withOpacity(0.15),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected ? Colors.white : Colors.white.withOpacity(0.3),
-              width: 2,
+              color: isSelected ? Colors.white : Colors.white.withOpacity(0.4),
+              width: 1.5,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Icon(
-                    _getProductIcon(product.productType),
-                    color: isSelected ? Colors.blue.shade700 : Colors.white,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
+              Icon(
+                _getProductIcon(product.productType),
+                color: isSelected ? Colors.blue.shade700 : Colors.white,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
                       product.name,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: isSelected ? Colors.blue.shade700 : Colors.white,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                product.description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isSelected ? Colors.grey.shade600 : Colors.white70,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Colors.blue.shade100
-                          : Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      _getTypeDisplayName(product.productType),
+                    const SizedBox(height: 2),
+                    Text(
+                      'R\$ ${product.basePrice.toStringAsFixed(2)}',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: isSelected ? Colors.blue.shade700 : Colors.white,
+                        color:
+                            isSelected ? Colors.green.shade700 : Colors.white70,
                       ),
                     ),
-                  ),
-                  Text(
-                    'R\$ ${product.basePrice.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: isSelected ? Colors.green.shade700 : Colors.white,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

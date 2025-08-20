@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import '../controllers/budget_controller.dart';
 
 import '../widgets/product_selector.dart';
-import '../widgets/dynamic_form_widget.dart';
-import '../widgets/pricing_summary.dart';
+import '../widgets/unified_form_summary.dart';
 import '../widgets/loading_overlay.dart';
 
 /// Tela principal do sistema de orçamentos
@@ -247,76 +246,79 @@ class _BudgetScreenState extends State<BudgetScreen>
   }
 
   Widget _buildFormContent() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    if (_controller.formController == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Column(
       children: [
-        // Formulário dinâmico
+        // Widget unificado com formulário e resumo
         Expanded(
-          flex: 2,
           child: Container(
-            padding: const EdgeInsets.all(20),
-            child: DynamicFormWidget(
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: UnifiedFormSummary(
               formController: _controller.formController!,
               onFieldChanged: _controller.updateFormField,
+              budgetSummary: _controller.getBudgetSummary(),
+              pricingResult: _controller.currentPricing,
+              validationResult: _controller.currentValidation,
             ),
           ),
         ),
 
-        // Resumo lateral
+        // Botão de submit
         Container(
-          width: 350,
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          width: double.infinity,
+          height: 56,
           decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(-2, 0),
-              ),
-            ],
+            gradient: _controller.canSubmit
+                ? const LinearGradient(
+                    colors: [Color(0xFF48BB78), Color(0xFF38A169)],
+                  )
+                : null,
+            color: _controller.canSubmit ? null : Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: _controller.canSubmit
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF48BB78).withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
-          child: Column(
-            children: [
-              // Resumo de preços
-              Expanded(
-                child: PricingSummary(
-                  budgetSummary: _controller.getBudgetSummary(),
-                  pricingResult: _controller.currentPricing,
-                  validationResult: _controller.currentValidation,
-                ),
-              ),
-
-              // Botão de submit
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.grey.shade200),
-                  ),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _controller.canSubmit ? _onSubmitBudget : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade600,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Gerar Orçamento',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: _controller.canSubmit ? _onSubmitBudget : null,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Gerar Orçamento',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: _controller.canSubmit
+                        ? Colors.white
+                        : Colors.grey.shade600,
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ],
