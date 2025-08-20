@@ -128,7 +128,7 @@ class _BudgetScreenState extends State<BudgetScreen>
           ),
           const SizedBox(height: 20),
           Text(
-            'Bem-vindo ao Sistema de Orçamentos',
+            'Bem-vindo ao sistema',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
@@ -308,7 +308,7 @@ class _BudgetScreenState extends State<BudgetScreen>
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  'Gerar Orçamento',
+                  'Gerar orçamento',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

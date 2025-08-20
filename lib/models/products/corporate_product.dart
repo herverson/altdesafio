@@ -27,7 +27,7 @@ class CorporateProduct extends Product {
       ),
       const SelectFieldConfig(
         key: 'contract_type',
-        label: 'Tipo de Contrato',
+        label: 'Tipo de contrato',
         isRequired: true,
         order: 2,
         options: [
@@ -38,7 +38,7 @@ class CorporateProduct extends Product {
       ),
       const SelectFieldConfig(
         key: 'support_level',
-        label: 'Nível de Suporte',
+        label: 'Nível de suporte',
         isRequired: true,
         order: 3,
         options: [
@@ -58,7 +58,7 @@ class CorporateProduct extends Product {
       ),
       const SelectFieldConfig(
         key: 'deployment_type',
-        label: 'Tipo de Implantação',
+        label: 'Tipo de implantação',
         isRequired: true,
         order: 5,
         options: [
@@ -69,7 +69,7 @@ class CorporateProduct extends Product {
       ),
       const SelectFieldConfig(
         key: 'compliance_level',
-        label: 'Nível de Compliance',
+        label: 'Nível de compliance',
         isRequired: true,
         order: 6,
         options: [
@@ -81,7 +81,7 @@ class CorporateProduct extends Product {
       ),
       const NumberFieldConfig(
         key: 'delivery_days',
-        label: 'Prazo de Entrega (dias)',
+        label: 'Prazo de entrega (dias)',
         isRequired: true,
         order: 7,
         min: 1,
@@ -99,7 +99,7 @@ class CorporateProduct extends Product {
     final supportLevel = formData['support_level']?.toString() ?? '';
 
     if (contractType == 'enterprise' && supportLevel != '24x7') {
-      errors.add('Contratos Enterprise exigem suporte 24x7');
+      errors.add('Contratos enterprise exigem suporte 24x7');
     }
 
     // Validação SLA vs Support Level

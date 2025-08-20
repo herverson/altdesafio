@@ -93,7 +93,7 @@ lib/
 1. Clone o repositório:
 ```bash
 git clone <repo-url>
-cd altdesafaio
+cd altdesafio
 ```
 
 2. Instale as dependências:

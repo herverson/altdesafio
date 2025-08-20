@@ -376,7 +376,7 @@ class PricingSummary extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Valor Total:',
+                'Valor total:',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white70,
@@ -398,7 +398,7 @@ class PricingSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Economia Total:',
+                  'Economia total:',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.white70,
