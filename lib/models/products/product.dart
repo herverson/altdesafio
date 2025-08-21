@@ -3,7 +3,9 @@ import '../fields/form_field_config.dart';
 
 /// Classe abstrata base para produtos com polimorfismo
 abstract class Product extends BaseModel {
+  @override
   final String id;
+  @override
   final String name;
   final String description;
   final double basePrice;

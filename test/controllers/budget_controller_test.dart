@@ -1,9 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:altdesafio/controllers/budget_controller.dart';
-import 'package:altdesafio/controllers/form_controller.dart';
-import 'package:altdesafio/models/products/product.dart';
 import 'package:altdesafio/models/products/industrial_product.dart';
-import 'package:altdesafio/services/rules_engine.dart';
 
 void main() {
   group('BudgetController Tests', () {

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../controllers/budget_controller.dart';
-
+import '../core/design/app_theme.dart';
 import '../widgets/product_selector.dart';
 import '../widgets/unified_form_summary.dart';
 import '../widgets/loading_overlay.dart';
 
 /// Tela principal do sistema de orçamentos
 class BudgetScreen extends StatefulWidget {
-  const BudgetScreen({Key? key}) : super(key: key);
+  const BudgetScreen({super.key});
 
   @override
   State<BudgetScreen> createState() => _BudgetScreenState();
@@ -26,7 +27,7 @@ class _BudgetScreenState extends State<BudgetScreen>
     _controller.addListener(_onControllerChanged);
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
 
@@ -48,14 +49,16 @@ class _BudgetScreenState extends State<BudgetScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'AltForce - Orçamentos Dinâmicos',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Colors.blue.shade700,
-        foregroundColor: Colors.white,
+          style: AppTheme.headline3.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3),
+        backgroundColor: AppTheme.primaryColor,
         elevation: 0,
         actions: [
           if (_controller.formController?.selectedProduct != null)
@@ -63,7 +66,7 @@ class _BudgetScreenState extends State<BudgetScreen>
               icon: const Icon(Icons.refresh),
               onPressed: _controller.clearForm,
               tooltip: 'Limpar formulário',
-            ),
+            ).animate().fadeIn(delay: 300.ms).scale(),
         ],
       ),
       body: Stack(
@@ -75,6 +78,32 @@ class _BudgetScreenState extends State<BudgetScreen>
           if (_controller.isLoading) const LoadingOverlay(),
         ],
       ),
+      floatingActionButton: _controller.formController?.selectedProduct != null
+          ? Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: FloatingActionButton.extended(
+                onPressed: _controller.canSubmit ? _onSubmitBudget : null,
+                backgroundColor: _controller.canSubmit
+                    ? AppTheme.successColor
+                    : AppTheme.textLightColor,
+                foregroundColor: Colors.white,
+                elevation: _controller.canSubmit ? 8 : 2,
+                icon: _controller.canSubmit
+                    ? Icon(Icons.check_circle).animate().scale(duration: 200.ms)
+                    : const Icon(Icons.block),
+                label: Text(
+                  'Gerar orçamento',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.3)
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -85,17 +114,16 @@ class _BudgetScreenState extends State<BudgetScreen>
 
     return Column(
       children: [
-        // Header com seletor de produto
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.blue.shade700,
+            color: AppTheme.primaryColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
+                color: AppTheme.primaryColor.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -105,45 +133,49 @@ class _BudgetScreenState extends State<BudgetScreen>
             onProductSelected: _controller.selectProduct,
           ),
         ),
-
-        // Conteúdo principal
         Expanded(
-          child: _controller.formController?.selectedProduct != null
-              ? _buildFormContent()
-              : _buildWelcomeState(),
+          child: SingleChildScrollView(
+            child: _controller.formController?.selectedProduct != null
+                ? _buildFormContent()
+                : _buildWelcomeState(),
+          ),
         ),
       ],
     );
   }
 
   Widget _buildWelcomeState() {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.assignment,
-            size: 80,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Bem-vindo ao sistema',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey.shade700,
+          Center(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.assignment,
+                  size: 80,
+                  color: AppTheme.textLightColor,
+                ).animate().scale(duration: 800.ms, curve: Curves.elasticOut),
+                const SizedBox(height: 20),
+                Text(
+                  'Bem-vindo ao sistema',
+                  style: AppTheme.headline2.copyWith(
+                    color: AppTheme.textPrimaryColor,
+                  ),
+                ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.3),
+                const SizedBox(height: 12),
+                Text(
+                  'Selecione um produto acima para começar',
+                  style: AppTheme.body1.copyWith(
+                    color: AppTheme.textSecondaryColor,
+                  ),
+                ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            'Selecione um produto acima para começar',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 40),
           _buildFeaturesList(),
         ],
       ),
@@ -153,15 +185,14 @@ class _BudgetScreenState extends State<BudgetScreen>
   Widget _buildFeaturesList() {
     return Container(
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 40),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -170,53 +201,64 @@ class _BudgetScreenState extends State<BudgetScreen>
         children: [
           Text(
             'Características do Sistema:',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey.shade800,
+            style: AppTheme.headline3.copyWith(
+              color: AppTheme.textPrimaryColor,
             ),
-          ),
+          ).animate().fadeIn(delay: 600.ms),
           const SizedBox(height: 16),
           _buildFeatureItem(
             icon: Icons.dynamic_form,
             title: 'Formulários Dinâmicos',
             description:
                 'Campos que se adaptam automaticamente ao tipo de produto',
+            delay: 700,
           ),
           _buildFeatureItem(
             icon: Icons.rule,
             title: 'Engine de Regras',
             description: 'Regras de negócio configuráveis e intercambiáveis',
+            delay: 800,
           ),
           _buildFeatureItem(
             icon: Icons.calculate,
             title: 'Precificação Inteligente',
             description: 'Cálculos automáticos com descontos e taxas',
+            delay: 900,
           ),
           _buildFeatureItem(
             icon: Icons.check_circle,
             title: 'Validação Avançada',
             description: 'Validações contextuais e interdependentes',
+            delay: 1000,
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.3);
   }
 
   Widget _buildFeatureItem({
     required IconData icon,
     required String title,
     required String description,
+    required int delay,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            color: Colors.blue.shade600,
-            size: 20,
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              color: AppTheme.primaryColor,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -225,16 +267,15 @@ class _BudgetScreenState extends State<BudgetScreen>
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: AppTheme.body1.copyWith(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    color: AppTheme.textPrimaryColor,
                   ),
                 ),
                 Text(
                   description,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
+                  style: AppTheme.body2.copyWith(
+                    color: AppTheme.textSecondaryColor,
                   ),
                 ),
               ],
@@ -242,7 +283,7 @@ class _BudgetScreenState extends State<BudgetScreen>
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(delay: delay.ms).slideX(begin: 0.3);
   }
 
   Widget _buildFormContent() {
@@ -250,123 +291,73 @@ class _BudgetScreenState extends State<BudgetScreen>
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Column(
-      children: [
-        // Widget unificado com formulário e resumo
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
             ),
-            child: UnifiedFormSummary(
-              formController: _controller.formController!,
-              onFieldChanged: _controller.updateFormField,
-              budgetSummary: _controller.getBudgetSummary(),
-              pricingResult: _controller.currentPricing,
-              validationResult: _controller.currentValidation,
-            ),
-          ),
+          ],
         ),
-
-        // Botão de submit
-        Container(
-          margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-          width: double.infinity,
-          height: 56,
-          decoration: BoxDecoration(
-            gradient: _controller.canSubmit
-                ? const LinearGradient(
-                    colors: [Color(0xFF48BB78), Color(0xFF38A169)],
-                  )
-                : null,
-            color: _controller.canSubmit ? null : Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: _controller.canSubmit
-                ? [
-                    BoxShadow(
-                      color: const Color(0xFF48BB78).withOpacity(0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: _controller.canSubmit ? _onSubmitBudget : null,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  'Gerar orçamento',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: _controller.canSubmit
-                        ? Colors.white
-                        : Colors.grey.shade600,
-                  ),
-                ),
-              ),
-            ),
-          ),
+        child: UnifiedFormSummary(
+          formController: _controller.formController!,
+          onFieldChanged: _controller.updateFormField,
+          budgetSummary: _controller.getBudgetSummary(),
+          pricingResult: _controller.currentPricing,
+          validationResult: _controller.currentValidation,
         ),
-      ],
+      ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3),
     );
   }
 
   Widget _buildErrorState() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.error_outline,
-            size: 80,
-            color: Colors.red.shade400,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Erro ao carregar sistema',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.red.shade700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            _controller.error!,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.red.shade600,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () {
-              _controller.clearForm();
-              // Recriar controller
-              _controller.dispose();
-              setState(() {
-                _controller = BudgetController();
-                _controller.addListener(_onControllerChanged);
-              });
-            },
-            child: const Text('Tentar Novamente'),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 80,
+              color: AppTheme.errorColor,
+            ).animate().shake(duration: 600.ms),
+            const SizedBox(height: 20),
+            Text(
+              'Erro ao carregar sistema',
+              style: AppTheme.headline2.copyWith(
+                color: AppTheme.errorColor,
+              ),
+            ).animate().fadeIn(delay: 200.ms),
+            const SizedBox(height: 12),
+            Text(
+              _controller.error!,
+              style: AppTheme.body1.copyWith(
+                color: AppTheme.errorColor,
+              ),
+              textAlign: TextAlign.center,
+            ).animate().fadeIn(delay: 400.ms),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                _controller.clearForm();
+
+                _controller.dispose();
+                setState(() {
+                  _controller = BudgetController();
+                  _controller.addListener(_onControllerChanged);
+                });
+              },
+              child: const Text('Tentar Novamente'),
+            ).animate().fadeIn(delay: 600.ms).scale(),
+          ],
+        ),
       ),
     );
   }
@@ -378,8 +369,22 @@ class _BudgetScreenState extends State<BudgetScreen>
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Orçamento gerado com sucesso!'),
-            backgroundColor: Colors.green.shade600,
+            content: Row(
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                const Text('Orçamento gerado com sucesso!'),
+              ],
+            ),
+            backgroundColor: AppTheme.successColor,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
             action: SnackBarAction(
               label: 'Novo',
               textColor: Colors.white,
@@ -390,8 +395,22 @@ class _BudgetScreenState extends State<BudgetScreen>
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(_controller.error ?? 'Erro ao gerar orçamento'),
-            backgroundColor: Colors.red.shade600,
+            content: Row(
+              children: [
+                Icon(
+                  Icons.error,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(_controller.error ?? 'Erro ao gerar orçamento'),
+              ],
+            ),
+            backgroundColor: AppTheme.errorColor,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
         );
       }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:altdesafio/widgets/unified_form_summary.dart';
 
 void main() {
   group('UnifiedFormSummary Widget Tests', () {
@@ -9,9 +8,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Container(
-              child: const Text('UnifiedFormSummary placeholder test'),
-            ),
+            body: const Text('UnifiedFormSummary placeholder test'),
           ),
         ),
       );

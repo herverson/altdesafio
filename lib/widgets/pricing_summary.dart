@@ -8,11 +8,11 @@ class PricingSummary extends StatelessWidget {
   final ValidationResult? validationResult;
 
   const PricingSummary({
-    Key? key,
+    super.key,
     required this.budgetSummary,
     required this.pricingResult,
     required this.validationResult,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

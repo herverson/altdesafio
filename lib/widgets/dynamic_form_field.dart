@@ -15,21 +15,21 @@ class DynamicFormFieldFactory {
     }
 
     switch (config.runtimeType) {
-      case TextFieldConfig:
+      case const (TextFieldConfig):
         return _buildTextField(
           config as TextFieldConfig,
           value,
           onChanged,
           errorText,
         );
-      case NumberFieldConfig:
+      case const (NumberFieldConfig):
         return _buildNumberField(
           config as NumberFieldConfig,
           value,
           onChanged,
           errorText,
         );
-      case SelectFieldConfig:
+      case const (SelectFieldConfig):
         return _buildSelectField(
           config as SelectFieldConfig,
           value,
@@ -308,9 +308,9 @@ class FieldInfoWidget extends StatelessWidget {
 
   IconData _getFieldIcon(FormFieldConfig config) {
     switch (config.runtimeType) {
-      case NumberFieldConfig:
+      case const (NumberFieldConfig):
         return Icons.numbers;
-      case SelectFieldConfig:
+      case const (SelectFieldConfig):
         return Icons.arrow_drop_down;
       default:
         return Icons.text_fields;

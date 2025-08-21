@@ -13,7 +13,6 @@ class ProductRepository extends MemoryRepository<Product> {
   }
 
   void _initializeData() {
-    // Produtos Industriais
     save(IndustrialProduct(
       id: 'ind_001',
       name: 'Motor Trifásico 5CV',
@@ -28,7 +27,20 @@ class ProductRepository extends MemoryRepository<Product> {
       basePrice: 15000.00,
     ));
 
-    // Produtos Residenciais
+    save(IndustrialProduct(
+      id: 'ind_003',
+      name: 'Sistema de Automação PLC',
+      description: 'Controlador lógico programável industrial',
+      basePrice: 8000.00,
+    ));
+
+    save(IndustrialProduct(
+      id: 'ind_004',
+      name: 'Painel Elétrico 400A',
+      description: 'Painel de distribuição elétrica industrial',
+      basePrice: 12000.00,
+    ));
+
     save(ResidentialProduct(
       id: 'res_001',
       name: 'Ventilador de Teto',
@@ -43,7 +55,20 @@ class ProductRepository extends MemoryRepository<Product> {
       basePrice: 1200.00,
     ));
 
-    // Produtos Corporativos
+    save(ResidentialProduct(
+      id: 'res_003',
+      name: 'Sistema de Iluminação LED',
+      description: 'Kit completo de iluminação LED residencial',
+      basePrice: 800.00,
+    ));
+
+    save(ResidentialProduct(
+      id: 'res_004',
+      name: 'Interfone Digital',
+      description: 'Sistema de interfone com vídeo e áudio',
+      basePrice: 450.00,
+    ));
+
     save(CorporateProduct(
       id: 'corp_001',
       name: 'Sistema ERP Corporativo',
@@ -56,6 +81,20 @@ class ProductRepository extends MemoryRepository<Product> {
       name: 'Plataforma de BI Analytics',
       description: 'Solução de Business Intelligence e Analytics',
       basePrice: 25000.00,
+    ));
+
+    save(CorporateProduct(
+      id: 'corp_003',
+      name: 'Sistema de CRM Avançado',
+      description: 'Gestão de relacionamento com clientes',
+      basePrice: 18000.00,
+    ));
+
+    save(CorporateProduct(
+      id: 'corp_004',
+      name: 'Plataforma de E-commerce',
+      description: 'Solução completa para vendas online',
+      basePrice: 35000.00,
     ));
   }
 

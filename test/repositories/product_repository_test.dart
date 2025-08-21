@@ -3,8 +3,6 @@ import 'package:altdesafio/repositories/product_repository.dart';
 import 'package:altdesafio/repositories/repository.dart';
 import 'package:altdesafio/models/products/product.dart';
 import 'package:altdesafio/models/products/industrial_product.dart';
-import 'package:altdesafio/models/products/residential_product.dart';
-import 'package:altdesafio/models/products/corporate_product.dart';
 
 void main() {
   group('ProductRepository Tests', () {

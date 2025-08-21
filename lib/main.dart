@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/design/app_theme.dart';
 import 'screens/budget_screen.dart';
 
 void main() {
@@ -6,16 +7,14 @@ void main() {
 }
 
 class AltForceApp extends StatelessWidget {
-  const AltForceApp({Key? key}) : super(key: key);
+  const AltForceApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AltForce - Orçamentos Dinâmicos',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
       home: const BudgetScreen(),
     );
   }

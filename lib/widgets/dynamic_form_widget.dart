@@ -8,10 +8,10 @@ class DynamicFormWidget extends StatefulWidget {
   final Function(String, dynamic) onFieldChanged;
 
   const DynamicFormWidget({
-    Key? key,
+    super.key,
     required this.formController,
     required this.onFieldChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<DynamicFormWidget> createState() => _DynamicFormWidgetState();
@@ -137,11 +137,8 @@ class _DynamicFormWidgetState extends State<DynamicFormWidget>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header do produto
             _buildProductHeader(product),
             const SizedBox(height: 24),
-
-            // Campos do formulário
             if (fields.isNotEmpty) ...[
               _buildSectionTitle('Configuração do Produto'),
               const SizedBox(height: 16),
@@ -157,12 +154,10 @@ class _DynamicFormWidgetState extends State<DynamicFormWidget>
                     errorText: errors[field.key],
                   ),
                 );
-              }).toList(),
+              }),
             ] else ...[
               _buildNoFieldsMessage(),
             ],
-
-            // Erros gerais
             if (errors.isNotEmpty) ...[
               const SizedBox(height: 16),
               _buildErrorSection(errors),

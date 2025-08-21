@@ -67,7 +67,9 @@ class RuleResult {
 
 /// Classe abstrata base para regras de negócio
 abstract class BusinessRule extends BaseModel {
+  @override
   final String id;
+  @override
   final String name;
   final String description;
   final int priority;

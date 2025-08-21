@@ -88,7 +88,6 @@ class ResidentialProduct extends Product {
   List<String> validate(Map<String, dynamic> formData) {
     final errors = <String>[];
 
-    // Validação específica: Instalação no teto com garantia > 3 anos
     final installation = formData['installation_type']?.toString() ?? '';
     final warranty =
         int.tryParse(formData['warranty_years']?.toString() ?? '1') ?? 1;
@@ -97,7 +96,6 @@ class ResidentialProduct extends Product {
       errors.add('Instalação no teto suporta garantia máxima de 3 anos');
     }
 
-    // Validação de eficiência vs garantia
     final efficiency = formData['energy_efficiency']?.toString() ?? 'D';
     if (efficiency == 'D' && warranty > 2) {
       errors.add('Produtos com eficiência D têm garantia máxima de 2 anos');
@@ -110,7 +108,6 @@ class ResidentialProduct extends Product {
   double calculateBasePrice(Map<String, dynamic> formData) {
     double price = basePrice;
 
-    // Ajuste por cor
     final color = formData['color']?.toString() ?? 'white';
     switch (color) {
       case 'gold':
@@ -124,12 +121,10 @@ class ResidentialProduct extends Product {
         break;
     }
 
-    // Ajuste por garantia
     final warranty =
         int.tryParse(formData['warranty_years']?.toString() ?? '1') ?? 1;
-    price *= (1 + (warranty - 1) * 0.1); // 10% por ano adicional
+    price *= (1 + (warranty - 1) * 0.1);
 
-    // Ajuste por eficiência energética
     final efficiency = formData['energy_efficiency']?.toString() ?? 'D';
     switch (efficiency) {
       case 'A':

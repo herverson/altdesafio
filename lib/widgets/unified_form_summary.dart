@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../controllers/form_controller.dart';
 import '../controllers/budget_controller.dart';
 import '../services/rules_engine.dart';
@@ -13,13 +14,13 @@ class UnifiedFormSummary extends StatefulWidget {
   final ValidationResult? validationResult;
 
   const UnifiedFormSummary({
-    Key? key,
+    super.key,
     required this.formController,
     required this.onFieldChanged,
     required this.budgetSummary,
     required this.pricingResult,
     required this.validationResult,
-  }) : super(key: key);
+  });
 
   @override
   State<UnifiedFormSummary> createState() => _UnifiedFormSummaryState();
@@ -131,16 +132,12 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
 
     List<Widget> listItems = [];
 
-    // Header do produto
     listItems.add(_buildProductHeader(product));
 
-    // Campos do formulário
     if (fields.isNotEmpty) {
-      // Título da seção de configuração
       listItems
           .add(_buildSectionHeader('Configuração do Produto', Icons.settings));
 
-      // Adicionar campos visíveis
       for (var field in fields.where((field) => field.isVisible)) {
         listItems.add(_buildFormFieldItem(field, errors));
       }
@@ -148,7 +145,6 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
       listItems.add(_buildNoFieldsMessage());
     }
 
-    // Seção de resumo de preços
     if (widget.budgetSummary != null) {
       listItems
           .add(_buildSectionHeader('Resumo do Orçamento', Icons.calculate));
@@ -170,7 +166,6 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
       listItems.add(_buildEmptyPricingState());
     }
 
-    // Erros gerais
     if (errors.isNotEmpty) {
       final displayErrors = errors.entries
           .where((entry) => !entry.key.startsWith('field_'))
@@ -192,11 +187,14 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
           ),
         ],
       ),
-      child: ListView.separated(
-        padding: const EdgeInsets.all(20),
-        itemCount: listItems.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        itemBuilder: (context, index) => listItems[index],
+      child: SizedBox(
+        height: 400,
+        child: ListView.separated(
+          padding: const EdgeInsets.all(20),
+          itemCount: listItems.length,
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
+          itemBuilder: (context, index) => listItems[index],
+        ),
       ),
     );
   }
@@ -260,7 +258,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'Base: R\$ ${product.basePrice.toStringAsFixed(2)}',
+                      'Base: ${NumberFormat.currency(
+                        locale: 'pt_BR',
+                        symbol: 'R\$ ',
+                        decimalDigits: 2,
+                      ).format(product.basePrice)}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -403,7 +405,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
           const SizedBox(height: 12),
           _buildPriceRow(
             'Preço Base (unid.)',
-            'R\$ ${pricing.basePrice.toStringAsFixed(2)}',
+            NumberFormat.currency(
+              locale: 'pt_BR',
+              symbol: 'R\$ ',
+              decimalDigits: 2,
+            ).format(pricing.basePrice),
           ),
           _buildPriceRow(
             'Quantidade',
@@ -425,7 +431,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
           const Divider(height: 20),
           _buildPriceRow(
             'Preço Final (unid.)',
-            'R\$ ${pricing.finalPrice.toStringAsFixed(2)}',
+            NumberFormat.currency(
+              locale: 'pt_BR',
+              symbol: 'R\$ ',
+              decimalDigits: 2,
+            ).format(pricing.finalPrice),
             isTotal: true,
           ),
         ],
@@ -478,7 +488,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
             ),
           ),
           Text(
-            '${isDiscount ? '' : '+'}R\$ ${adjustment.amount.abs().toStringAsFixed(2)}',
+            '${isDiscount ? '' : '+'}${NumberFormat.currency(
+              locale: 'pt_BR',
+              symbol: 'R\$ ',
+              decimalDigits: 2,
+            ).format(adjustment.amount.abs())}',
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -559,7 +573,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
             ),
           ),
           Text(
-            '${isDiscount ? '-' : '+'}R\$ ${adjustment.amount.abs().toStringAsFixed(2)}',
+            '${isDiscount ? '-' : '+'}${NumberFormat.currency(
+              locale: 'pt_BR',
+              symbol: 'R\$ ',
+              decimalDigits: 2,
+            ).format(adjustment.amount.abs())}',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               color: color.shade700,
@@ -673,7 +691,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
                 ),
               ),
               Text(
-                'R\$ ${summary.totalPrice.toStringAsFixed(2)}',
+                NumberFormat.currency(
+                  locale: 'pt_BR',
+                  symbol: 'R\$ ',
+                  decimalDigits: 2,
+                ).format(summary.totalPrice),
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -695,7 +717,11 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
                   ),
                 ),
                 Text(
-                  'R\$ ${summary.totalSavings.toStringAsFixed(2)}',
+                  NumberFormat.currency(
+                    locale: 'pt_BR',
+                    symbol: 'R\$ ',
+                    decimalDigits: 2,
+                  ).format(summary.totalSavings),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

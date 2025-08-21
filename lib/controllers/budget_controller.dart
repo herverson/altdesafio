@@ -23,10 +23,8 @@ class BudgetController extends ChangeNotifier {
   })  : _productRepository = productRepository ?? ProductRepository(),
         _rulesService = rulesService ?? RulesService() {
     _loadProductsSync();
-    // Não inicializar automaticamente - será feito quando necessário
   }
 
-  // Getters
   FormController<Product>? get formController => _formController;
   List<Product> get availableProducts => List.unmodifiable(_availableProducts);
   PricingResult? get currentPricing => _currentPricing;
@@ -36,86 +34,39 @@ class BudgetController extends ChangeNotifier {
   bool get canSubmit =>
       _formController?.isValid == true && _currentValidation?.isValid == true;
 
-  /// Inicializar controller
-  Future<void> _initialize() async {
-    _setLoading(true);
-    try {
-      // Inicializar serviço de regras
-      _rulesService.initialize();
-
-      // Criar form controller
-      _formController = FormController<Product>(
-        pricingEngine: _rulesService.pricingEngine,
-        validationEngine: _rulesService.validationEngine,
-        visibilityEngine: _rulesService.visibilityEngine,
-      );
-
-      // Configurar listener para mudanças no formulário
-      _formController!.addListener(_onFormChanged);
-
-      // Carregar produtos disponíveis
-      await _loadProducts();
-
-      _error = null;
-    } catch (e) {
-      _error = 'Erro ao inicializar: $e';
-    } finally {
-      _setLoading(false);
-    }
-  }
-
   /// Inicializar controller de forma síncrona (para testes)
   void _initializeSync() {
     try {
-      // Inicializar serviço de regras
       _rulesService.initialize();
 
-      // Criar form controller
       _formController = FormController<Product>(
         pricingEngine: _rulesService.pricingEngine,
         validationEngine: _rulesService.validationEngine,
         visibilityEngine: _rulesService.visibilityEngine,
       );
 
-      // Configurar listener para mudanças no formulário
       _formController!.addListener(_onFormChanged);
 
       _error = null;
 
-      // Debug: verificar se foi criado
       assert(_formController != null, 'Form controller should be created');
     } catch (e) {
       _error = 'Erro ao inicializar: $e';
-      print('Error initializing: $e');
-    }
-  }
-
-  /// Carregar produtos do repositório
-  Future<void> _loadProducts() async {
-    try {
-      _availableProducts = await _productRepository.findAll();
-      notifyListeners();
-    } catch (e) {
-      throw Exception('Erro ao carregar produtos: $e');
     }
   }
 
   /// Carregar produtos do repositório (versão síncrona para testes)
   void _loadProductsSync() {
     try {
-      // Carregar produtos sincronamente para testes
       _productRepository.findAll().then((products) {
         _availableProducts = products;
         notifyListeners();
       });
-    } catch (e) {
-      // Ignorar erros em testes
-    }
+    } catch (e) {}
   }
 
   /// Selecionar produto (dispara recálculos)
   void selectProduct(Product product) {
-    // Inicializar se necessário
     if (_formController == null) {
       _initializeSync();
     }
@@ -146,10 +97,8 @@ class BudgetController extends ChangeNotifier {
       return;
     }
 
-    // Calcular preço com regras aplicadas
     _currentPricing = _formController!.calculatePrice();
 
-    // Validar formulário
     _formController!.validateAndSubmit();
     _currentValidation = ValidationResult(
       isValid: !_formController!.hasErrors,
@@ -179,10 +128,8 @@ class BudgetController extends ChangeNotifier {
 
     _setLoading(true);
     try {
-      // Simular processamento
       await Future.delayed(const Duration(seconds: 1));
 
-      // Aqui seria feita a persistência do orçamento
       debugPrint('Orçamento submetido com sucesso!');
       debugPrint('Produto: ${_formController!.selectedProduct!.name}');
       debugPrint('Dados: ${_formController!.formData}');

@@ -9,7 +9,6 @@ import 'package:altdesafio/models/products/corporate_product.dart';
 void main() {
   group('ProductSelector Widget Tests', () {
     late List<Product> testProducts;
-    Product? selectedProduct;
 
     setUp(() {
       testProducts = [
@@ -32,7 +31,6 @@ void main() {
           basePrice: 50000.0,
         ),
       ];
-      selectedProduct = null;
     });
 
     Widget createTestWidget({
@@ -45,9 +43,10 @@ void main() {
           body: ProductSelector(
             products: products ?? testProducts,
             selectedProduct: selected,
-            onProductSelected: onSelected ?? (product) {
-              selectedProduct = product;
-            },
+            onProductSelected: onSelected ??
+                (product) {
+                  // Product selected: $product
+                },
           ),
         ),
       );
@@ -58,7 +57,8 @@ void main() {
         await tester.pumpWidget(createTestWidget());
 
         expect(find.text('Selecione um Produto'), findsOneWidget);
-        expect(find.text('Escolha um produto para começar o orçamento'), findsOneWidget);
+        expect(find.text('Escolha um produto para começar o orçamento'),
+            findsOneWidget);
       });
 
       testWidgets('should display product type buttons', (tester) async {
@@ -125,9 +125,10 @@ void main() {
     });
 
     group('Product Selection Tests', () {
-      testWidgets('should call onProductSelected when product is tapped', (tester) async {
+      testWidgets('should call onProductSelected when product is tapped',
+          (tester) async {
         Product? callbackProduct;
-        
+
         await tester.pumpWidget(createTestWidget(
           onSelected: (product) {
             callbackProduct = product;
@@ -151,9 +152,10 @@ void main() {
         expect(find.text('Motor Trifásico 5CV'), findsOneWidget);
       });
 
-      testWidgets('should handle selection of different product types', (tester) async {
+      testWidgets('should handle selection of different product types',
+          (tester) async {
         final selectedProducts = <Product>[];
-        
+
         await tester.pumpWidget(createTestWidget(
           onSelected: (product) {
             selectedProducts.add(product);
@@ -175,7 +177,8 @@ void main() {
     });
 
     group('Product Display Tests', () {
-      testWidgets('should display product information correctly', (tester) async {
+      testWidgets('should display product information correctly',
+          (tester) async {
         await tester.pumpWidget(createTestWidget());
 
         // Check industrial product
@@ -194,7 +197,8 @@ void main() {
       testWidgets('should display product icons correctly', (tester) async {
         await tester.pumpWidget(createTestWidget());
 
-        expect(find.byIcon(Icons.precision_manufacturing), findsOneWidget); // Industrial
+        expect(find.byIcon(Icons.precision_manufacturing),
+            findsOneWidget); // Industrial
         expect(find.byIcon(Icons.home), findsOneWidget); // Residential
         expect(find.byIcon(Icons.business), findsOneWidget); // Corporate
       });
@@ -257,8 +261,9 @@ void main() {
 
     group('UI Responsiveness Tests', () {
       testWidgets('should be scrollable with many products', (tester) async {
-        final manyProducts = List.generate(20, (index) => 
-          IndustrialProduct(
+        final manyProducts = List.generate(
+          20,
+          (index) => IndustrialProduct(
             id: 'IND$index',
             name: 'Product $index',
             description: 'Description $index',
@@ -272,16 +277,16 @@ void main() {
 
         // Should be scrollable
         expect(find.byType(ListView), findsOneWidget);
-        
+
         // First product should be visible
         expect(find.text('Product 0'), findsOneWidget);
-        
+
         // Scroll to find later products
         await tester.scrollUntilVisible(
           find.text('Product 10'),
           500.0,
         );
-        
+
         expect(find.text('Product 10'), findsOneWidget);
       });
 
@@ -312,24 +317,25 @@ void main() {
         // Change filter
         await tester.tap(find.text('Industrial'));
         await tester.pump(); // Start animation
-        
+
         // Should have AnimatedContainer or similar animation widgets
         expect(find.byType(AnimatedContainer), findsWidgets);
-        
+
         await tester.pumpAndSettle(); // Complete animation
-        
+
         expect(find.text('Motor Trifásico 5CV'), findsOneWidget);
         expect(find.text('Ventilador de Teto'), findsNothing);
       });
     });
 
     group('Accessibility Tests', () {
-      testWidgets('should have proper semantics for screen readers', (tester) async {
+      testWidgets('should have proper semantics for screen readers',
+          (tester) async {
         await tester.pumpWidget(createTestWidget());
 
         // Filter buttons should be accessible
         expect(find.byType(ElevatedButton), findsNWidgets(3));
-        
+
         // Product cards should be tappable
         expect(find.byType(InkWell), findsWidgets);
       });
@@ -352,11 +358,12 @@ void main() {
         // Should not crash when tapping without callback
         await tester.tap(find.text('Motor Trifásico 5CV'));
         await tester.pumpAndSettle();
-        
+
         // Should complete without error
       });
 
-      testWidgets('should handle products with null/empty fields', (tester) async {
+      testWidgets('should handle products with null/empty fields',
+          (tester) async {
         final problematicProduct = IndustrialProduct(
           id: 'PROBLEM',
           name: '',
@@ -374,4 +381,3 @@ void main() {
     });
   });
 }
-
