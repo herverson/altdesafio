@@ -36,6 +36,16 @@ class _ProductSelectorState extends State<ProductSelector> {
             color: Colors.white,
           ),
         ),
+        const SizedBox(height: 8),
+        
+        // Mensagem de boas-vindas
+        const Text(
+          'Escolha um produto para começar o orçamento',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.white70,
+          ),
+        ),
         const SizedBox(height: 16),
 
         // Filtro por tipo
@@ -67,67 +77,24 @@ class _ProductSelectorState extends State<ProductSelector> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: [
-          _buildTypeChip('Todos', null),
-          const SizedBox(width: 8),
-          ...types.map((type) => Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: _buildTypeChip(_getTypeDisplayName(type), type),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTypeChip(String label, String? type) {
-    final isSelected = _selectedType == type;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.white : Colors.white.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              _selectedType = isSelected ? null : type;
-            });
-          },
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? Colors.blue.shade700 : Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                shadows: isSelected
-                    ? null
-                    : [
-                        const Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black54,
-                        ),
-                      ],
+        children: types.map((type) => Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _selectedType = _selectedType == type ? null : type;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _selectedType == type ? Colors.white : Colors.white.withOpacity(0.25),
+              foregroundColor: _selectedType == type ? Colors.blue.shade700 : Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
+            child: Text(_getTypeDisplayName(type)),
           ),
-        ),
+        )).toList(),
       ),
     );
   }

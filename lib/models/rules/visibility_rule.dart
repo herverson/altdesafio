@@ -193,3 +193,125 @@ class ProductTypeVisibilityRule extends VisibilityRule {
     return modifiedFields;
   }
 }
+
+/// Regra de visibilidade de certificação
+class CertificationVisibilityRule extends VisibilityRule {
+  final String triggerField;
+  final dynamic triggerValue;
+
+  CertificationVisibilityRule({
+    required super.id,
+    required super.name,
+    required super.description,
+    required super.priority,
+    required this.triggerField,
+    required this.triggerValue,
+    super.isEnabled,
+    super.applicableProductTypes,
+    super.conditions,
+  });
+
+  @override
+  bool isApplicable(RuleContext context) {
+    if (!isEnabled) return false;
+
+    final productType = context.metadata['productType']?.toString();
+    if (applicableProductTypes.isNotEmpty &&
+        (productType == null ||
+            !applicableProductTypes.contains(productType))) {
+      return false;
+    }
+
+    final fieldValue = context.formData[triggerField];
+    return fieldValue == triggerValue;
+  }
+
+  @override
+  RuleResult execute(RuleContext context) {
+    if (!isApplicable(context)) {
+      return RuleResult.success();
+    }
+
+    return RuleResult.success(
+      message: 'Regras de visibilidade de certificação aplicadas',
+      changes: {'certificationFieldsVisible': true},
+    );
+  }
+
+  @override
+  Map<String, FormFieldConfig> applyVisibilityChanges(
+    List<FormFieldConfig> fields,
+    RuleContext context,
+  ) {
+    if (!isApplicable(context)) {
+      return {};
+    }
+
+    final changes = <String, FormFieldConfig>{};
+    for (final field in fields) {
+      if (field.key.contains('certification') ||
+          field.key.contains('voltage')) {
+        final updatedField = field.copyWith(isVisible: true, isRequired: true);
+        changes[field.key] = updatedField;
+      }
+    }
+
+    return changes;
+  }
+}
+
+/// Regra de visibilidade de suporte
+class SupportVisibilityRule extends VisibilityRule {
+  final String productType;
+
+  SupportVisibilityRule({
+    required super.id,
+    required super.name,
+    required super.description,
+    required super.priority,
+    required this.productType,
+    super.isEnabled,
+    super.applicableProductTypes,
+    super.conditions,
+  });
+
+  @override
+  bool isApplicable(RuleContext context) {
+    if (!isEnabled) return false;
+
+    final contextProductType = context.metadata['productType']?.toString();
+    return contextProductType == productType;
+  }
+
+  @override
+  RuleResult execute(RuleContext context) {
+    if (!isApplicable(context)) {
+      return RuleResult.success();
+    }
+
+    return RuleResult.success(
+      message: 'Regras de visibilidade de suporte aplicadas',
+      changes: {'supportFieldsVisible': true},
+    );
+  }
+
+  @override
+  Map<String, FormFieldConfig> applyVisibilityChanges(
+    List<FormFieldConfig> fields,
+    RuleContext context,
+  ) {
+    if (!isApplicable(context)) {
+      return {};
+    }
+
+    final changes = <String, FormFieldConfig>{};
+    for (final field in fields) {
+      if (field.key.contains('support') || field.key.contains('warranty')) {
+        final updatedField = field.copyWith(isVisible: true);
+        changes[field.key] = updatedField;
+      }
+    }
+
+    return changes;
+  }
+}

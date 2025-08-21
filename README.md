@@ -177,18 +177,6 @@ Total (100x): R$ 261.630,00
 - **Visual Moderno**: Material Design 3
 - **Acessibilidade**: Componentes acessíveis
 
-## 📝 Próximos Passos
-
-- [ ] Persistência de dados (SQLite/Hive)
-- [ ] Testes unitários e de integração
-- [ ] Geração de PDFs dos orçamentos
-- [ ] Histórico de orçamentos
-- [ ] Configuração avançada de regras via interface
-- [ ] API REST para sincronização
-- [ ] Modo offline
-
----
-
-**Desenvolvido por**: AltForce Challenge
+**Desenvolvido por**: Herverson de Sousa
 **Framework**: Flutter 3.6.0
 **Linguagem**: Dart 3.6.0

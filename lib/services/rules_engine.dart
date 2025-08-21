@@ -8,6 +8,9 @@ import '../models/fields/form_field_config.dart';
 class RulesEngine<T extends BusinessRule> {
   final List<T> _rules = [];
 
+  /// Número de regras na engine
+  int get ruleCount => _rules.length;
+
   /// Adicionar regra
   void addRule(T rule) {
     _rules.add(rule);

@@ -69,4 +69,9 @@ class ProductRepository extends MemoryRepository<Product> {
     return findWhere(
         (product) => product.basePrice >= min && product.basePrice <= max);
   }
+
+  /// Alias para findAll (para compatibilidade com testes)
+  Future<List<Product>> getAll() async {
+    return findAll();
+  }
 }

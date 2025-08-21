@@ -12,6 +12,7 @@ class RulesService {
   late final PricingEngine _pricingEngine;
   late final ValidationEngine _validationEngine;
   late final VisibilityEngine _visibilityEngine;
+  bool _isInitialized = false;
 
   PricingEngine get pricingEngine => _pricingEngine;
   ValidationEngine get validationEngine => _validationEngine;
@@ -19,6 +20,8 @@ class RulesService {
 
   /// Inicializar todas as engines com regras padrão
   void initialize() {
+    if (_isInitialized) return; // Skip if already initialized
+
     _pricingEngine = PricingEngine();
     _validationEngine = ValidationEngine();
     _visibilityEngine = VisibilityEngine();
@@ -26,6 +29,8 @@ class RulesService {
     _initializePricingRules();
     _initializeValidationRules();
     _initializeVisibilityRules();
+
+    _isInitialized = true;
   }
 
   void _initializePricingRules() {

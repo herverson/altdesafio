@@ -199,4 +199,10 @@ class FormController<T extends Product> extends ChangeNotifier {
   bool isFieldVisible(String key) {
     return _fields.any((f) => f.key == key && f.isVisible);
   }
+
+  /// Adicionar erro manualmente (para compatibilidade com testes)
+  void addError(String key, String error) {
+    _errors[key] = error;
+    notifyListeners();
+  }
 }
