@@ -187,21 +187,18 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
           ),
         ],
       ),
-      child: SizedBox(
-        height: 400,
-        child: ListView.separated(
-          padding: const EdgeInsets.all(20),
-          itemCount: listItems.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) => listItems[index],
-        ),
+      child: ListView.separated(
+        padding: const EdgeInsets.all(24),
+        itemCount: listItems.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 20),
+        itemBuilder: (context, index) => listItems[index],
       ),
     );
   }
 
   Widget _buildProductHeader(Product product) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.blue.shade50,
         borderRadius: BorderRadius.circular(8),
@@ -281,7 +278,7 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
 
   Widget _buildSectionHeader(String title, IconData icon) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(8),
@@ -385,7 +382,7 @@ class _UnifiedFormSummaryState extends State<UnifiedFormSummary>
     final quantity = widget.budgetSummary!.quantity;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(8),

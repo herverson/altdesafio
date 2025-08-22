@@ -134,11 +134,11 @@ class _BudgetScreenState extends State<BudgetScreen>
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: _controller.formController?.selectedProduct != null
-                ? _buildFormContent()
-                : _buildWelcomeState(),
-          ),
+          child: _controller.formController?.selectedProduct != null
+              ? _buildFormContent()
+              : SingleChildScrollView(
+                  child: _buildWelcomeState(),
+                ),
         ),
       ],
     );
@@ -292,7 +292,7 @@ class _BudgetScreenState extends State<BudgetScreen>
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.surfaceColor,
@@ -305,12 +305,15 @@ class _BudgetScreenState extends State<BudgetScreen>
             ),
           ],
         ),
-        child: UnifiedFormSummary(
-          formController: _controller.formController!,
-          onFieldChanged: _controller.updateFormField,
-          budgetSummary: _controller.getBudgetSummary(),
-          pricingResult: _controller.currentPricing,
-          validationResult: _controller.currentValidation,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: UnifiedFormSummary(
+            formController: _controller.formController!,
+            onFieldChanged: _controller.updateFormField,
+            budgetSummary: _controller.getBudgetSummary(),
+            pricingResult: _controller.currentPricing,
+            validationResult: _controller.currentValidation,
+          ),
         ),
       ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3),
     );
