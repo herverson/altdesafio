@@ -147,7 +147,9 @@ class ResidentialProduct extends Product {
     String? name,
     String? description,
     double? basePrice,
+    int? quantity,
     Map<String, dynamic>? attributes,
+    bool? isVipClient,
   }) {
     return ResidentialProduct(
       id: id ?? this.id,

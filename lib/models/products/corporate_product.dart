@@ -180,7 +180,9 @@ class CorporateProduct extends Product {
     String? name,
     String? description,
     double? basePrice,
+    int? quantity,
     Map<String, dynamic>? attributes,
+    bool? isVipClient,
   }) {
     return CorporateProduct(
       id: id ?? this.id,

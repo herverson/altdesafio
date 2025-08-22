@@ -58,11 +58,18 @@ class BudgetController extends ChangeNotifier {
   /// Carregar produtos do repositório (versão síncrona para testes)
   void _loadProductsSync() {
     try {
-      _productRepository.findAll().then((products) {
-        _availableProducts = products;
-        notifyListeners();
+      _productRepository.findAll().then((result) {
+        result.onSuccess((products) {
+          _availableProducts = products;
+          notifyListeners();
+        }).onFailure((error) {
+          _error = 'Erro ao carregar produtos: $error';
+          notifyListeners();
+        });
       });
-    } catch (e) {}
+    } catch (e) {
+      _error = 'Erro ao carregar produtos: $e';
+    }
   }
 
   /// Selecionar produto (dispara recálculos)

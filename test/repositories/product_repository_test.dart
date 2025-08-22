@@ -14,8 +14,11 @@ void main() {
 
     group('Basic Repository Operations', () {
       test('should return all predefined products', () async {
-        final products = await repository.getAll();
+        final result = await repository.getAll();
 
+        expect(result.isSuccess, isTrue);
+
+        final products = result.data!;
         expect(products, isNotEmpty);
         expect(products.length,
             greaterThanOrEqualTo(6)); // At least 2 of each type

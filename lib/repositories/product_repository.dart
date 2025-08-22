@@ -1,3 +1,4 @@
+import '../core/result/result.dart';
 import '../models/products/product.dart';
 import '../models/products/industrial_product.dart';
 import '../models/products/residential_product.dart';
@@ -99,18 +100,21 @@ class ProductRepository extends MemoryRepository<Product> {
   }
 
   /// Buscar produtos por tipo
-  Future<List<Product>> findByType(String productType) async {
-    return findWhere((product) => product.productType == productType);
+  Future<Result<List<Product>>> findByType(String productType) async {
+    final result =
+        await findWhere((product) => product.productType == productType);
+    return result;
   }
 
   /// Buscar produtos na faixa de preço
-  Future<List<Product>> findByPriceRange(double min, double max) async {
-    return findWhere(
+  Future<Result<List<Product>>> findByPriceRange(double min, double max) async {
+    final result = await findWhere(
         (product) => product.basePrice >= min && product.basePrice <= max);
+    return result;
   }
 
   /// Alias para findAll (para compatibilidade com testes)
-  Future<List<Product>> getAll() async {
+  Future<Result<List<Product>>> getAll() async {
     return findAll();
   }
 }
