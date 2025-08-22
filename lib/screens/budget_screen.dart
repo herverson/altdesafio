@@ -52,7 +52,7 @@ class _BudgetScreenState extends State<BudgetScreen>
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'AltForce - Orçamentos Dinâmicos',
+          'AltForce - Orçamentos dinâmicos',
           style: AppTheme.headline3.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w600,

@@ -32,14 +32,6 @@ class _ProductSelectorState extends State<ProductSelector> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Selecione um Produto',
-          style: AppTheme.headline3.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3),
-        const SizedBox(height: 8),
-        Text(
           'Escolha um produto para começar o orçamento',
           style: AppTheme.body2.copyWith(
             color: Colors.white70,
