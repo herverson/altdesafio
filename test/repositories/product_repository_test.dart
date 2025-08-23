@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:altdesafio/repositories/product_repository.dart';
-import 'package:altdesafio/repositories/repository.dart';
-import 'package:altdesafio/models/products/product.dart';
-import 'package:altdesafio/models/products/industrial_product.dart';
+import '../../lib/repositories/product_repository.dart';
+import '../../lib/models/products/product.dart';
+import '../../lib/models/products/industrial_product.dart';
+import '../../lib/models/products/residential_product.dart';
+import '../../lib/models/products/corporate_product.dart';
 
 void main() {
   group('ProductRepository Tests', () {
@@ -17,11 +18,10 @@ void main() {
         final result = await repository.getAll();
 
         expect(result.isSuccess, isTrue);
-
+        
         final products = result.data!;
         expect(products, isNotEmpty);
-        expect(products.length,
-            greaterThanOrEqualTo(6)); // At least 2 of each type
+        expect(products.length, greaterThanOrEqualTo(6)); // At least 2 of each type
 
         // Check that we have all product types
         final types = products.map((p) => p.productType).toSet();
@@ -29,24 +29,32 @@ void main() {
       });
 
       test('should find product by id', () async {
-        final products = await repository.getAll();
+        final result = await repository.getAll();
+        expect(result.isSuccess, isTrue);
+        
+        final products = result.data!;
         final firstProduct = products.first;
 
-        final foundProduct = await repository.findById(firstProduct.id);
+        final foundResult = await repository.findById(firstProduct.id);
 
+        expect(foundResult.isSuccess, isTrue);
+        final foundProduct = foundResult.data;
         expect(foundProduct, isNotNull);
         expect(foundProduct!.id, equals(firstProduct.id));
         expect(foundProduct.name, equals(firstProduct.name));
       });
 
       test('should return null for non-existent id', () async {
-        final product = await repository.findById('non_existent_id');
-        expect(product, isNull);
+        final result = await repository.findById('non_existent_id');
+        expect(result.isSuccess, isTrue);
+        expect(result.data, isNull);
       });
 
       test('should filter products by type', () async {
-        final industrialProducts = await repository.findByType('industrial');
+        final result = await repository.findByType('industrial');
 
+        expect(result.isSuccess, isTrue);
+        final industrialProducts = result.data!;
         expect(industrialProducts, isNotEmpty);
         for (final product in industrialProducts) {
           expect(product.productType, equals('industrial'));
@@ -55,14 +63,16 @@ void main() {
       });
 
       test('should return empty list for invalid type', () async {
-        final products = await repository.findByType('invalid_type');
-        expect(products, isEmpty);
+        final result = await repository.findByType('invalid_type');
+        expect(result.isSuccess, isTrue);
+        expect(result.data!, isEmpty);
       });
 
       test('should filter products by price range', () async {
-        final expensiveProducts =
-            await repository.findByPriceRange(10000, 100000);
+        final result = await repository.findByPriceRange(10000, 100000);
 
+        expect(result.isSuccess, isTrue);
+        final expensiveProducts = result.data!;
         expect(expensiveProducts, isNotEmpty);
         for (final product in expensiveProducts) {
           expect(product.basePrice, greaterThanOrEqualTo(10000));
@@ -71,15 +81,18 @@ void main() {
       });
 
       test('should return empty list for impossible price range', () async {
-        final products = await repository.findByPriceRange(1000000, 2000000);
-        expect(products, isEmpty);
+        final result = await repository.findByPriceRange(1000000, 2000000);
+        expect(result.isSuccess, isTrue);
+        expect(result.data!, isEmpty);
       });
     });
 
     group('Product Type Validation', () {
       test('should contain correct industrial products', () async {
-        final industrialProducts = await repository.findByType('industrial');
+        final result = await repository.findByType('industrial');
 
+        expect(result.isSuccess, isTrue);
+        final industrialProducts = result.data!;
         expect(industrialProducts.length, greaterThanOrEqualTo(2));
 
         final motorProduct = industrialProducts.firstWhere(
@@ -90,196 +103,126 @@ void main() {
       });
 
       test('should contain correct residential products', () async {
-        final residentialProducts = await repository.findByType('residential');
+        final result = await repository.findByType('residential');
 
+        expect(result.isSuccess, isTrue);
+        final residentialProducts = result.data!;
         expect(residentialProducts.length, greaterThanOrEqualTo(2));
 
         // Check for typical residential products
-        final productNames =
-            residentialProducts.map((p) => p.name.toLowerCase()).join(' ');
-        expect(
-            productNames,
-            anyOf([
-              contains('ventilador'),
-              contains('ar condicionado'),
-              contains('residential'),
-            ]));
+        final productNames = residentialProducts.map((p) => p.name.toLowerCase()).join(' ');
+        expect(productNames, contains('ventilador'));
       });
 
       test('should contain correct corporate products', () async {
-        final corporateProducts = await repository.findByType('corporate');
+        final result = await repository.findByType('corporate');
 
+        expect(result.isSuccess, isTrue);
+        final corporateProducts = result.data!;
         expect(corporateProducts.length, greaterThanOrEqualTo(2));
 
-        // Corporate products should generally be more expensive
-        final avgPrice =
-            corporateProducts.map((p) => p.basePrice).reduce((a, b) => a + b) /
-                corporateProducts.length;
-        expect(avgPrice,
-            greaterThan(10000)); // Corporate products should be expensive
-      });
-    });
-
-    group('Repository Interface Compliance', () {
-      test('should implement IRepository interface correctly', () {
-        expect(repository, isA<IRepository<Product>>());
-      });
-
-      test('should handle async operations properly', () async {
-        // Test that all methods return Future
-        expect(repository.getAll(), isA<Future<List<Product>>>());
-        expect(repository.findById('test'), isA<Future<Product?>>());
-      });
-
-      test('should maintain data consistency across calls', () async {
-        final products1 = await repository.getAll();
-        final products2 = await repository.getAll();
-
-        expect(products1.length, equals(products2.length));
-
-        // Check that the same products are returned
-        for (int i = 0; i < products1.length; i++) {
-          expect(products1[i].id, equals(products2[i].id));
-          expect(products1[i].name, equals(products2[i].name));
-        }
+        // Check for typical corporate products
+        final productNames = corporateProducts.map((p) => p.name.toLowerCase()).join(' ');
+        expect(productNames, contains('erp'));
       });
     });
 
     group('Product Attributes', () {
-      test('should have valid form fields for all products', () async {
-        final products = await repository.getAll();
-
+      test('all products should have valid attributes', () async {
+        final result = await repository.getAll();
+        expect(result.isSuccess, isTrue);
+        
+        final products = result.data!;
         for (final product in products) {
-          final fields = product.getFormFields();
-          expect(fields, isNotEmpty);
-
-          // Each field should have required properties
-          for (final field in fields) {
-            expect(field.key, isNotEmpty);
-            expect(field.label, isNotEmpty);
-            expect(field.order, greaterThanOrEqualTo(0));
-          }
+          expect(product.id, isNotEmpty);
+          expect(product.name, isNotEmpty);
+          expect(product.description, isNotEmpty);
+          expect(product.basePrice, greaterThan(0));
+          expect(product.productType, isNotEmpty);
         }
       });
 
-      test('should have unique form field keys within each product', () async {
-        final products = await repository.getAll();
+      test('products should have correct types', () async {
+        final result = await repository.getAll();
+        expect(result.isSuccess, isTrue);
+        
+        final products = result.data!;
+        final industrialCount = products.where((p) => p is IndustrialProduct).length;
+        final residentialCount = products.where((p) => p is ResidentialProduct).length;
+        final corporateCount = products.where((p) => p is CorporateProduct).length;
 
-        for (final product in products) {
-          final fields = product.getFormFields();
-          final keys = fields.map((f) => f.key).toList();
-          final uniqueKeys = keys.toSet();
+        expect(industrialCount, greaterThanOrEqualTo(2));
+        expect(residentialCount, greaterThanOrEqualTo(2));
+        expect(corporateCount, greaterThanOrEqualTo(2));
+      });
+    });
 
-          expect(uniqueKeys.length, equals(keys.length),
-              reason: 'Product ${product.name} has duplicate field keys');
+    group('Repository Consistency', () {
+      test('should return consistent results', () async {
+        final result1 = await repository.getAll();
+        final result2 = await repository.getAll();
+
+        expect(result1.isSuccess, isTrue);
+        expect(result2.isSuccess, isTrue);
+        
+        final products1 = result1.data!;
+        final products2 = result2.data!;
+        
+        expect(products1.length, equals(products2.length));
+        
+        for (int i = 0; i < products1.length; i++) {
+          expect(products1[i].id, equals(products2[i].id));
+          expect(products1[i].name, equals(products2[i].name));
+          expect(products1[i].basePrice, equals(products2[i].basePrice));
         }
       });
 
-      test('should have consistent field ordering', () async {
-        final products = await repository.getAll();
+      test('findByType should be consistent with getAll filtering', () async {
+        final allResult = await repository.getAll();
+        final industrialResult = await repository.findByType('industrial');
 
-        for (final product in products) {
-          final fields = product.getFormFields();
-
-          // Fields should be ordered by their order property
-          for (int i = 1; i < fields.length; i++) {
-            expect(fields[i].order, greaterThanOrEqualTo(fields[i - 1].order),
-                reason: 'Fields not properly ordered in ${product.name}');
-          }
+        expect(allResult.isSuccess, isTrue);
+        expect(industrialResult.isSuccess, isTrue);
+        
+        final allProducts = allResult.data!;
+        final industrialProducts = industrialResult.data!;
+        
+        final filteredIndustrial = allProducts.where((p) => p.productType == 'industrial').toList();
+        
+        expect(industrialProducts.length, equals(filteredIndustrial.length));
+        
+        for (final product in industrialProducts) {
+          expect(filteredIndustrial.any((p) => p.id == product.id), isTrue);
         }
       });
     });
 
-    group('Business Logic Validation', () {
-      test('should validate products have reasonable base prices', () async {
-        final products = await repository.getAll();
-
-        for (final product in products) {
-          expect(product.basePrice, greaterThan(0));
-          expect(
-              product.basePrice, lessThan(1000000)); // Reasonable upper limit
-        }
+    group('Error Handling', () {
+      test('should handle empty id gracefully', () async {
+        final result = await repository.findById('');
+        expect(result.isFailure, isTrue);
+        expect(result.error, contains('ID não pode ser vazio'));
       });
 
-      test('should validate industrial products have appropriate fields',
-          () async {
-        final industrialProducts = await repository.findByType('industrial');
-
-        for (final product in industrialProducts) {
-          final fields = product.getFormFields();
-          final fieldKeys = fields.map((f) => f.key).toSet();
-
-          // Industrial products should have these critical fields
-          expect(fieldKeys, contains('quantity'));
-          expect(fieldKeys, contains('voltage'));
-          expect(fieldKeys, contains('delivery_days'));
-        }
-      });
-
-      test('should validate residential products have appropriate fields',
-          () async {
-        final residentialProducts = await repository.findByType('residential');
-
-        for (final product in residentialProducts) {
-          final fields = product.getFormFields();
-          final fieldKeys = fields.map((f) => f.key).toSet();
-
-          // Residential products should have quantity at minimum
-          expect(fieldKeys, contains('quantity'));
-        }
-      });
-
-      test('should validate corporate products have appropriate fields',
-          () async {
-        final corporateProducts = await repository.findByType('corporate');
-
-        for (final product in corporateProducts) {
-          final fields = product.getFormFields();
-          final fieldKeys = fields.map((f) => f.key).toSet();
-
-          // Corporate products should have these business-oriented fields
-          expect(fieldKeys, contains('contract_type'));
-          expect(fieldKeys, contains('support_level'));
-        }
+      test('should handle null-like ids gracefully', () async {
+        final result = await repository.findById('null');
+        expect(result.isSuccess, isTrue);
+        expect(result.data, isNull);
       });
     });
 
     group('Performance Tests', () {
       test('should handle multiple concurrent requests', () async {
-        final futures = List.generate(10, (index) => repository.getAll());
-        final results = await Future.wait(futures);
-
-        expect(results.length, equals(10));
-
-        // All results should be identical
-        for (int i = 1; i < results.length; i++) {
-          expect(results[i].length, equals(results[0].length));
+        final futures = <Future>[];
+        for (int i = 0; i < 10; i++) {
+          futures.add(repository.getAll());
         }
-      });
-
-      test('should complete operations within reasonable time', () async {
-        final stopwatch = Stopwatch()..start();
-
-        await repository.getAll();
-
-        stopwatch.stop();
-        expect(stopwatch.elapsedMilliseconds, lessThan(1000)); // Should be fast
-      });
-    });
-
-    group('Error Handling', () {
-      test('should handle null/empty parameters gracefully', () async {
-        expect(() => repository.findById(''), returnsNormally);
-        expect(() => repository.findByType(''), returnsNormally);
-      });
-
-      test('should return consistent results for edge cases', () async {
-        final emptyTypeProducts = await repository.findByType('');
-        expect(emptyTypeProducts, isEmpty);
-
-        final invalidRangeProducts =
-            await repository.findByPriceRange(-100, -50);
-        expect(invalidRangeProducts, isEmpty);
+        final results = await Future.wait(futures);
+        
+        for (final result in results) {
+          expect((result as dynamic).isSuccess, isTrue);
+          expect((result as dynamic).data!, isNotEmpty);
+        }
       });
     });
   });

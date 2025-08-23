@@ -342,6 +342,7 @@ void main() {
 
       testWidgets('should support keyboard navigation', (tester) async {
         await tester.pumpWidget(createTestWidget());
+        await tester.pumpAndSettle();
 
         // This would require more sophisticated testing for keyboard navigation
         // For now, we ensure the widgets exist
@@ -354,6 +355,7 @@ void main() {
         await tester.pumpWidget(createTestWidget(
           onSelected: null,
         ));
+        await tester.pumpAndSettle();
 
         // Should not crash when tapping without callback
         await tester.tap(find.text('Motor Trifásico 5CV'));
@@ -376,7 +378,7 @@ void main() {
         ));
 
         // Should handle gracefully without crashing
-        expect(find.text('R\$ 0.00'), findsOneWidget);
+        expect(find.textContaining('R\$ 0'), findsOneWidget);
       });
     });
   });

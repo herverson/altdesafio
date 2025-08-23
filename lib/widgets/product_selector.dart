@@ -216,6 +216,7 @@ class _ProductSelectorState extends State<ProductSelector> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       product.name,

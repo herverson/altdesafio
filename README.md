@@ -288,4 +288,4 @@ print(product.totalPrice);            // 250000.0
 **Desenvolvido por**: Herverson de Sousa  
 **Framework**: Flutter 3.8.1  
 **Linguagem**: Dart 3.8.1  
-**Última Atualização**: Dezembro 2024
+**Última Atualização**: Agosto 2025
