@@ -574,7 +574,14 @@ product.calculateTotal(price, qty) // cálculo direto
 
 ---
 
+<img width="390" height="864" alt="Screenshot 2025-08-23 021908" src="https://github.com/user-attachments/assets/cb3c528c-7285-4b65-b5f7-252222ca4e22" />
+<img width="390" height="861" alt="Screenshot 2025-08-23 021807" src="https://github.com/user-attachments/assets/16c20dda-a3ac-415f-a25d-ba3823cdf2d6" />
+<img width="390" height="864" alt="Screenshot 2025-08-23 021742" src="https://github.com/user-attachments/assets/19f36ec1-4197-4825-b1ce-089ca20ceef7" />
+<img width="390" height="857" alt="Screenshot 2025-08-23 021919" src="https://github.com/user-attachments/assets/2b12cbf6-6c6d-4e1b-ac45-0d261bc90d08" />
+
+
 **Desenvolvido por**: Herverson de Sousa  
 **Framework**: Flutter 3.8.1  
 **Linguagem**: Dart 3.8.1  
+
 **Última Atualização**: Agosto 2025
