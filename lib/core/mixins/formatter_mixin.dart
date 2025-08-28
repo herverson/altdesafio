@@ -1,5 +1,4 @@
 /// Mixin para formatação de dados
-/// Baseado no altforce_dynamic_budgets
 mixin FormatterMixin {
   /// Formatar valor monetário em Real
   String formatCurrency(double value) => 'R\$ ${value.toStringAsFixed(2)}';

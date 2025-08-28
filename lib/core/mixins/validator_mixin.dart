@@ -1,5 +1,4 @@
 /// Mixin para validações comuns
-/// Baseado no altforce_dynamic_budgets com melhorias
 mixin ValidatorMixin {
   /// Verificar se valor é positivo
   bool isPositive(num value) => value > 0;

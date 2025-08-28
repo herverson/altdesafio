@@ -1,5 +1,4 @@
 /// Mixin para cálculos matemáticos comuns
-/// Baseado no altforce_dynamic_budgets
 mixin CalculatorMixin {
   /// Calcular porcentagem de um valor base
   double percentOf(double base, double percent) => base * (percent / 100);

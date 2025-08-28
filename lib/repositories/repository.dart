@@ -2,7 +2,6 @@ import '../core/result/result.dart';
 import '../models/base/base_model.dart';
 
 /// Interface genérica para repositórios com type safety e Result pattern
-/// Melhorado baseado no altforce_budget_module
 abstract class IRepository<T extends BaseModel> {
   /// Buscar todos os itens
   Future<Result<List<T>>> findAll();

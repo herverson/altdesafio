@@ -1,5 +1,4 @@
 /// Pattern Result para tratamento robusto de erros
-/// Baseado no altforce_budget_module
 abstract class Result<T> {
   const Result();
 

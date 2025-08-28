@@ -5,7 +5,6 @@ import '../base/base_model.dart';
 import '../fields/form_field_config.dart';
 
 /// Classe abstrata base para produtos com polimorfismo e mixins
-/// Melhorado baseado no altforce_dynamic_budgets
 abstract class Product extends BaseModel
     with CalculatorMixin, FormatterMixin, ValidatorMixin {
   @override
